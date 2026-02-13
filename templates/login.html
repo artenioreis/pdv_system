@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+
+{% block title %}Login - Sistema de Caixa{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* ======================================================= */
+    /* INÍCIO DA CORREÇÃO (FUNDO SEMPRE PREENCHIDO)  */
+    /* ======================================================= */
+
+    /* 1. ESTILO PADRÃO (PARA TODAS AS TELAS) */
+    
+        /*background-image: url('https://wallpapers.com/images/hd/sky-blue-background-klsgg0p0wj4pd0cg.jpg');*/
+        body {
+        /* Agora carrega da pasta local, funciona sem internet */
+        background-image: url("{{ url_for('static', filename='images/fundo_login.jpg') }}");
+        
+        /* 'cover': Garante que a imagem cubra a tela inteira */
+        background-size: cover; 
+        
+        /* 'center': Centraliza a imagem */
+        background-position: center center;
+
+        background-repeat: no-repeat;
+        background-attachment: fixed; /* Mantém o fundo fixo ao rolar */
+    }
+
+    /* Em telas de celular, o card de login deve ser mais opaco para legibilidade */
+    .card-login {
+        /* Quase opaco para garantir que o formulário seja legível */
+        background-color: rgba(255, 255, 255, 0.98); 
+        backdrop-filter: blur(5px);
+    }
+    
+    /* 2. AJUSTE PARA TELAS MAIORES (DESKTOP) */
+    @media (min-width: 768px) {
+        
+        /* As regras do 'body' foram removidas daqui
+           para que 'cover' e 'center' se apliquem sempre.
+        */
+
+        /* Em telas de desktop, o card pode ser um pouco mais transparente */
+        .card-login {
+            background-color: rgba(255, 255, 255, 0.95);
+        }
+    }
+    /* ======================================================= */
+    /* FIM DA CORREÇÃO                                */
+    /* ======================================================= */
+
+    /* ======================================================= */
+    /* NOVO ESTILO PARA O LOGO (LOGIN)               */
+    /* ======================================================= */
+    .logo-login {
+        max-width: 250px; /* Largura máxima do logo */
+        margin-bottom: 1rem; /* Espaçamento abaixo do logo */
+        filter: drop-shadow(2px 2px 3px rgba(13, 13, 14, 1)); /* Sombra suave */
+    }
+    /* ======================================================= */
+    
+    /* CSS PARA DIMINUIR OS INPUTS (MANTIDO) */
+    .form-control-sm-custom {
+        /* Diminui a altura e o padding do campo de texto */
+        height: calc(1.5em + 0.5rem + 2px);
+        padding: 0.25rem 0.5rem;
+        font-size: 0.9rem; /* Tamanho da fonte ligeiramente menor */
+    }
+    
+    .input-group-text-sm-custom {
+        /* Diminui o padding do ícone para acompanhar o input */
+        padding: 0.25rem 0.5rem;
+        font-size: 0.9rem;
+    }
+    /* --- FIM DO NOVO CSS --- */
+
+</style>
+{% endblock %}
+
+{% block content_public %}
+<div class="container-fluid min-vh-100 d-flex flex-column align-items-center pt-3 p-3">
+    
+    <div>
+        <img src="{{ url_for('static', filename='images/logo_empresa.png') }}" alt="Logo da Empresa" class="img-fluid logo-login">
+    </div>
+    <div class="row justify-content-center w-100">
+        <div class="col-11 col-sm-8 col-md-6 col-lg-4 col-xl-3">
+            <div class="card shadow card-login">
+                <div class="card-header bg-primary text-white text-center">
+                    <h4><i class="fas fa-cash-register"></i> Sistema de Caixa</h4>
+                    <small>Faça login para continuar</small>
+                </div>
+                <div class="card-body p-4">
+                    
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }} alert-dismissible fade show py-2" role="alert" style="font-size: 0.9rem;">
+                                    {{ message }}
+                                    <button type="button" class="btn-close pt-2" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+                    <form method="POST" action="{{ url_for('login') }}">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email:</label>
+                            <div class="input-group">
+                                <span class="input-group-text input-group-text-sm-custom">
+                                    <i class="fas fa-envelope"></i>
+                                </span>
+                                <input type="email" class="form-control form-control-sm-custom" id="email" name="email" required 
+                                       placeholder="seu@email.com">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="senha" class="form-label">Senha:</label>
+                            <div class="input-group">
+                                <span class="input-group-text input-group-text-sm-custom">
+                                    <i class="fas fa-lock"></i>
+                                </span>
+                                <input type="password" class="form-control form-control-sm-custom" id="senha" name="senha" required 
+                                       placeholder="Sua senha">
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-sign-in-alt"></i> Entrar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                </div>
+
+            </div>
+    </div>
+</div>
+{% endblock %}
